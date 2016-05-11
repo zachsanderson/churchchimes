@@ -4,6 +4,7 @@ var Speaker = require('speaker');
 
 // TODO: parse schedule
 
+
 // TODO: setup timeouts
 setTimeout(function() {
     console.log("starting");    
