@@ -3,6 +3,10 @@ var lame = require('lame');
 var Speaker = require('speaker');
 
 // TODO: parse schedule
+// Open arminius file
+var songlist = fs.readFileSync("arminius.csv", "UTF-8");
+
+console.log(songlist);
 
 
 // TODO: setup timeouts
@@ -13,6 +17,6 @@ setTimeout(function() {
       .on('format', function (format) {
         this.pipe(new Speaker(format));
       });
-    }, 60* 1000);
+    }, 3 * 1000);
 
 console.log("done");
