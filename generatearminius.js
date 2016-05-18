@@ -37,12 +37,12 @@ for (var i = 0; i < numberOfIntervals; i++) {
     for (var j = 0; j < (Math.floor(Math.random() * 3) + 1); j++) {
         songNumber = (Math.floor(Math.random() * SONGLIST.length));
         console.log(`                Song #${j+1}: ${SONGLIST[songNumber].filename}`);
-        csv += `${intervalTime.toString()}, ${SONGLIST[songNumber].filename}, ${SONGLIST[songNumber].songtitle}\n`;
+        csv += `${intervalTime.toString()} | ${SONGLIST[songNumber].filename} | ${SONGLIST[songNumber].songtitle}\n`;
     }
 }
 
-fs.writeFile("arminius.csv", csv, function(err) {
+fs.writeFile("arminius.txt", csv, function(err) {
 
 });
 
-console.log("CSV file written")
+console.log("CSV file written");
