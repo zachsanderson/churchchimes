@@ -2,8 +2,9 @@ var fs = require('fs');
 var lame = require('lame');
 var Speaker = require('speaker');
 
-// TODO: parse schedule
-// Open arminius file (this helped: http://stackoverflow.com/questions/23060567/convert-csv-file-data-in-json-data )
+// Parse schedule
+// Open arminius file 
+
 var songlist = fs.readFileSync("arminius.txt", "UTF-8"),
     lines = songlist.split("\n"),
     output = [],
@@ -11,36 +12,29 @@ var songlist = fs.readFileSync("arminius.txt", "UTF-8"),
     values,
     delay;
 
-for (i=0; i < lines.length; i++) {
-    if (lines[i].length > 0) {
-        obj = {};
-        values = lines[i].split("|");
-        obj["timetoplay"] = values[0].trim();
-        obj["filename"] = values[1].trim();
-        obj["songtitle"] = values[2].trim();
-        output.push(obj);
-    } else {
-        console.log("Empty line ignored");
-    }
-}
-
-// console.log(output);
+output = lines
+    .filter(function(el, i, ar) { return (el.length > 0); })
+    .map(function(v, i, ar) {
+        var splits = v.split('|');
+        return {
+            timetoplay: splits[0].trim(),
+            filename: splits[1].trim(),
+            songtitle: splits[2].trim()
+        };
+    });
 
 // TODO: Sort JSON by date/time
 
-// TODO:    Read in JSON line by line
-//          Remove past songs
-//          
+// Read in JSON line by line
+// Remove past songs      
 
 for (i=0; i < output.length; i++) {
+    // Check to see if this song was scheduled to play earlier
     if (Date.now() > new Date(output[i].timetoplay)) {
-        // console.log(`Removing ${output[i].timetoplay} playback of ${output[i].filename}`);
-        // console.log(output.length);
+        // Remove this song
         output.shift();
-        // console.log(output.length);
+        // Step i back 1 since length has changed and each song shifted forward one
         i -= 1;
-    } else {
-        //console.log(`Play ${output[i].filename} at ${output[i].timetoplay}`);
     }
 }
 
