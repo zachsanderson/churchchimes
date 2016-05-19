@@ -1,0 +1,15 @@
+{
+  "name": "chimes",
+  "version": "1.0.0",
+  "description": "Chime player for Node on Raspberry Pi",
+  "author": "Zach Sanderson",
+  "license": "MIT",
+  "keywords": [
+    "Chimes"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "lame": "^1.2.3",
+    "speaker": "^0.3.0"
+  }
+}

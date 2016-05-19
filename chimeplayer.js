@@ -19,6 +19,8 @@ for (i=0; i < lines.length; i++) {
         obj["filename"] = values[1].trim();
         obj["songtitle"] = values[2].trim();
         output.push(obj);
+    } else {
+        console.log("Empty line ignored");
     }
 }
 
