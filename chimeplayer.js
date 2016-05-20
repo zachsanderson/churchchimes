@@ -2,80 +2,126 @@ var fs = require('fs');
 var lame = require('lame');
 var Speaker = require('speaker');
 
+const DEFAULT_DELAY = 5000;
+
 // Parse schedule
 // Open arminius file 
 
-var songlist = fs.readFileSync("arminius.txt", "UTF-8"),
-    lines = songlist.split("\n"),
-    output = [],
-    obj,
-    values,
-    delay;
-
-output = lines
-    .filter(function(el, i, ar) { return (el.length > 0); })
-    .map(function(v, i, ar) {
-        var splits = v.split('|');
-        return {
-            timetoplay: splits[0].trim(),
-            filename: splits[1].trim(),
-            songtitle: splits[2].trim()
-        };
-    });
+var arminius = fs.readFileSync("arminius.txt", "UTF-8");
+var playlist = getPlaylist(arminius);
+var timeoutid;
 
 // TODO: Sort JSON by date/time
 
 // Read in JSON line by line
-// Remove past songs      
+// console.log(playlist);
 
-for (i=0; i < output.length; i++) {
-    // Check to see if this song was scheduled to play earlier
-    if (Date.now() > new Date(output[i].timetoplay)) {
-        // Remove this song
-        output.shift();
-        // Step i back 1 since length has changed and each song shifted forward one
-        i -= 1;
-    }
-}
+// Example FS watch functionality:
+// (Side effect to this is the program will never end without user action now)
+// NOTE: I think you probably want to watch a directory for changes rather than
+//   a single file. The reason being: a deletion of that file will end your
+//   ability to detect changes at all. The alternative would be in the case of
+//   a "rename" (deletions come across called renames as well), you could setup
+//   a NEW fswatcher, if you want. But I still think the impl will be simpler
+//   if you just watch a particular sub directory. Or better yet, look at a
+//   mount directory for automounted usb disk ;)
+fs.watch('arminius.txt', {persistent: true}, updatePlaylist);
 
-// console.log(output);
 
 console.log(new Date(Date.now()).toString());
 
-if (output.length > 0) {
-    queueSong(output[0]);
+if (playlist.length > 0) {
+    queueSong(playlist[0]);
 } else {
     console.log("No more songs to play (did not enter function)");
 }
 
 function queueSong(song) {
     // Set delay to 5 seconds if song is past due
-    if (Date.now() > new Date(song.timetoplay)) {
-        delay = 5000;
-    } else { // Set delay for when future song is scheduled
+    var delay = DEFAULT_DELAY;
+    if (Date.now() < new Date(song.timetoplay)) {
         delay = new Date(song.timetoplay) - Date.now();    
     }
     console.log(`${song.filename} will play in ${delay/1000} seconds`); 
 
-    setTimeout(function() {
+    timeoutid = setTimeout(function() {
         console.log(`Playing ${song.filename} at ${new Date(Date.now())}`);
         fs.createReadStream(`audio/${song.filename}`)
           .pipe(new lame.Decoder())
           .on("format", function (format) {
             this.pipe(new Speaker(format));
           })
-          //.on("start", function() {console.log(`${output[0].filename} now playing`);}) 
+          //.on("start", function() {console.log(`${playlist[0].filename} now playing`);}) 
           .on("end", function() {
             console.log(`${song.filename} finished playing`);
             // Remove song that was just played
-            output.shift();
+            playlist.shift();
             // After removing that song, queue next song if available
-            if (output.length > 0) {
-                queueSong(output[0]);
+            if (playlist.length > 0) {
+                queueSong(playlist[0]);
             } else {
                 console.log("Last song just played");
+                timeoutid = null;
             }
           });
         }, delay);
 }
-    // TODO: Allow for "Church is out" button    
+
+
+// TODO: Allow for "Church is out" button    
+
+/**
+ * Helper function to parse a String of file contents into
+ * a playlist, following our definition of a playlist (pipe-separated)
+ */
+function getPlaylist(fileContents)
+{
+    var lines = fileContents.split("\n");
+    var list = lines
+        .filter(function(el, i, ar) { return (el.length > 0); })
+        .map(function(v, i, ar) {
+            var splits = v.split('|');
+            return {
+                timetoplay: splits[0].trim(),
+                filename: splits[1].trim(),
+                songtitle: splits[2].trim()
+            };
+        });
+    
+    // Filter out past songs, return resulting array
+    return list.filter(function(el, i, ar) {
+        return (Date.now() < new Date(el.timetoplay));
+    });
+}
+
+/**
+ * Action handler for a file change in the 'arminius.txt' playlist
+ */
+function updatePlaylist(event, filename)
+{
+    if (event == 'change') {
+        console.log(`Playlist update detected on "${filename}"`);
+        
+        // Cancel old schedule
+        console.log('Canceling scheduled playback');
+        if (timeoutid) clearTimeout(timeoutid);
+
+        // Get new playlist
+        var newplaylist = fs.readFileSync("arminius.txt", "UTF-8"),
+        playlist = getPlaylist(newplaylist);
+
+        // And schedule new playback
+        if (playlist.length > 0) {
+            queueSong(playlist[0]);
+        } else {
+            console.log("No songs to play in new playlist");
+        }
+    }
+    else if (event == 'rename') {
+        console.log(`"${filename}" was renamed`);
+        // TODO: Handle this if desired
+    }
+    else {
+        console.log(`Unexpected FSWatcher event: ${event}`);
+    }
+}
