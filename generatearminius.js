@@ -5,11 +5,14 @@ var STEPBACKMINUTES = 5;
 var MININTERVALMINUTES = 3;
 var MAXINTERVALMINUTES = 5;
 var SONGLIST = [
-        {filename: "allcreaturesofourgod.mp3", songtitle: "All Creatures of Our God and King"},
-        {filename: "amazinggrace.mp3", songtitle: "Amazing Grace"},
-        {filename: "americanrobin.mp3", songtitle: "American Robin"},
-        {filename: "comethoualmightyking.mp3", songtitle: "Come Thou Almighty King"},
-        {filename: "mightyfortress.mp3", songtitle: "A Mighty Fortress is Our God"}
+        {filename: "FartherAlong.mp3", songtitle: "Farther Along"},
+        {filename: "057.mp3", songtitle: "O, For a Thousand Tongues to Sing"},
+        {filename: "061.mp3", songtitle: "Come Thou Almighty King"},
+        {filename: "064-low.mp3", songtitle: "Holy, Holy, Holy"},
+        {filename: "089-low.mp3", songtitle: "Joyful, Joyful, We Adore Thee"},
+        {filename: "092-low.mp3", songtitle: "For the Beauty of the Earth"},
+        {filename: "095-low.mp3", songtitle: "Praise God From Whom All Blessings Flow"},
+        {filename: "098-low.mp3", songtitle: "To God Be The Glory"}
     ];
 // Rounding coefficient for even minutes # of minutes * 60 seconds * 1000 milliseconds
 // ROUNDER could also be added to the interval portion if necessary
