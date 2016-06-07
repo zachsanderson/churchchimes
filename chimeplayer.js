@@ -2,7 +2,7 @@ var fs = require('fs');
 var lame = require('lame');
 var Speaker = require('speaker');
 
-const DEFAULT_DELAY = 5000;
+const DEFAULT_DELAY = 2000;
 
 // Parse schedule
 // Open arminius file 

@@ -9,6 +9,7 @@ var SONGLIST = [
         {filename: "057.mp3", songtitle: "O, For a Thousand Tongues to Sing"},
         {filename: "061.mp3", songtitle: "Come Thou Almighty King"},
         {filename: "064-low.mp3", songtitle: "Holy, Holy, Holy"},
+        {filename: "088-low.mp3", songtitle: "Maker, In Whom We Live"},
         {filename: "089-low.mp3", songtitle: "Joyful, Joyful, We Adore Thee"},
         {filename: "092-low.mp3", songtitle: "For the Beauty of the Earth"},
         {filename: "095-low.mp3", songtitle: "Praise God From Whom All Blessings Flow"},
