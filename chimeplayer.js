@@ -2,7 +2,7 @@ var fs = require('fs');
 var lame = require('lame');
 var Speaker = require('speaker');
 
-const DEFAULT_DELAY = 2000;
+const DEFAULT_DELAY = 3000;
 
 // Parse schedule
 // Open arminius file 
@@ -37,7 +37,7 @@ if (playlist.length > 0) {
 }
 
 function queueSong(song) {
-    // Set delay to 5 seconds if song is past due
+    // Set delay to 3 seconds (DEFAULT_DELAY) if song is past due
     var delay = DEFAULT_DELAY;
     if (Date.now() < new Date(song.timetoplay)) {
         delay = new Date(song.timetoplay) - Date.now();    
