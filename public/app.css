@@ -1,0 +1,43 @@
+html {
+    background: url(images/bg.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+body {
+    background-color: rgba(255,255,255,0.8);
+    width: 60%;
+    margin: 5% 0% 5% 32%;
+    padding: 2%;
+    border-radius: 2%;
+    font-family: sans-serif;
+    font-size: .9em;
+}
+
+h2 {
+    margin-bottom: 5px;
+    font-size: 1.1em;
+}
+
+#nowplaying {
+    font-weight: bold;
+}
+
+.songinfo {
+    text-align: right;
+    position: relative;
+    line-height: 110%;
+}
+
+.songtitle {
+    margin-right: 15px;
+    left: 0;
+    position: absolute;
+}
+
+.playtime {
+    font-size: 70%;
+    font-weight: normal;
+}
