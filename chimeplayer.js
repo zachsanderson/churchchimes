@@ -2,6 +2,15 @@ var fs = require('fs');
 var lame = require('lame');
 var Speaker = require('speaker');
 
+module.exports = function(io) {
+    io.on('connection', function(socket) {
+        console.log("This shit connected here");
+        socket.on('message', function(message) {
+            console.log("Connection on socket.io on socket", message.value);    
+        });    
+    });
+};
+
 const DEFAULT_DELAY = 3000;
 
 // Parse schedule
