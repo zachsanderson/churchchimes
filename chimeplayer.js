@@ -11,6 +11,9 @@ var arminius = fs.readFileSync("arminius.txt", "UTF-8");
 var playlist = getPlaylist(arminius);
 var timeoutid;
 
+// Reference socket.io from main app
+var io = null;
+
 // TODO: Sort JSON by date/time
 
 // Read in JSON line by line
@@ -50,10 +53,14 @@ function queueSong(song) {
           .pipe(new lame.Decoder())
           .on("format", function (format) {
             this.pipe(new Speaker(format));
+            if (io) io.emit('play', {song: playlist[0].filename});
           })
-          //.on("start", function() {console.log(`${playlist[0].filename} now playing`);}) 
           .on("end", function() {
             console.log(`${song.filename} finished playing`);
+
+            // Notify the front-end (all connections)
+            if (io) io.emit('stop');
+
             // Remove song that was just played
             playlist.shift();
             // After removing that song, queue next song if available
@@ -123,5 +130,15 @@ function updatePlaylist(event, filename)
     }
     else {
         console.log(`Unexpected FSWatcher event: ${event}`);
+    }
+}
+
+/**
+ * Define a link between the websocket and the chimeplayer, once a connection is made.
+ */
+module.exports = {
+    setSocketIo: function(socketio) {
+        // Assign the local (private) variable
+        io = socketio;
     }
 }
