@@ -16,11 +16,12 @@ app.get("/", function(req, res){
 });
 
 io.on('connection', function(socket){
-    console.log('a user connected');
+    console.log('websocket connected');
 });
+// Associate socketio with chimplayer
+chimeplayer.setSocketIo(io);
 
 http.listen(3001, function(){
     console.log("Server started");
 });
 
-chimeplayer(io);
