@@ -64,7 +64,7 @@ function queueSong(song) {
           .pipe(new lame.Decoder())
           .on("format", function (format) {
             this.pipe(new Speaker(format));
-            if (io) io.emit('play', {song: playlist[0].filename});
+            if (io) io.emit('play', {song: playlist[0].songtitle});
           })
           .on("end", function() {
             console.log(`${song.filename} finished playing`);
