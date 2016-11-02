@@ -7,7 +7,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-const PORT=3001;
+const PORT=3000;
 
 /**
  * Handler for the "shutdown" button press (sent via websocket command)
