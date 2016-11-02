@@ -5,9 +5,9 @@ var logger = require('./lib/log4js');
 
 module.exports = function(io) {
     io.on('connection', function(socket) {
-        console.log("This shit connected here");
+        logger.debug("This shit connected here");
         socket.on('message', function(message) {
-            console.log("Connection on socket.io on socket", message.value);    
+            logger.info("Connection on socket.io on socket", message.value);    
         });    
     });
 };
@@ -29,7 +29,7 @@ var io = null;
 // TODO: Sort JSON by date/time
 
 // Read in JSON line by line
-// console.log(playlist);
+// logger.debug(playlist);
 
 // Example FS watch functionality:
 // (Side effect to this is the program will never end without user action now)
@@ -48,7 +48,7 @@ logger.info(`Starting up at ${new Date(Date.now()).toString()}...`);
 if (playlist.length > 0) {
     queueSong(playlist[0]);
 } else {
-    console.log("No more songs to play (did not enter function)");
+    logger.info("No more songs to play (did not enter function)");
 }
 
 function queueSong(song) {
@@ -57,10 +57,10 @@ function queueSong(song) {
     if (Date.now() < new Date(song.timetoplay)) {
         delay = new Date(song.timetoplay) - Date.now();    
     }
-    console.log(`${song.filename} will play in ${delay/1000} seconds`); 
+    logger.info(`${song.filename} will play in ${delay/1000} seconds`); 
 
     timeoutid = setTimeout(function() {
-        console.log(`Playing ${song.filename} at ${new Date(Date.now())}`);
+        logger.info(`Playing ${song.filename} at ${new Date(Date.now())}`);
         fs.createReadStream(`audio/${song.filename}`)
           .pipe(new lame.Decoder())
           .on("format", function (format) {
@@ -68,7 +68,7 @@ function queueSong(song) {
             if (io) io.emit('play', {song: playlist[0].songtitle});
           })
           .on("end", function() {
-            console.log(`${song.filename} finished playing`);
+            logger.info(`${song.filename} finished playing`);
 
             // Notify the front-end (all connections)
             if (io) io.emit('stop');
@@ -79,7 +79,7 @@ function queueSong(song) {
             if (playlist.length > 0) {
                 queueSong(playlist[0]);
             } else {
-                console.log("Last song just played");
+                logger.info("Last song just played");
                 timeoutid = null;
             }
           });
@@ -119,10 +119,10 @@ function getPlaylist(fileContents)
 function updatePlaylist(event, filename)
 {
     if (event == 'change') {
-        console.log(`Playlist update detected on "${filename}"`);
+        logger.info(`Playlist update detected on "${filename}"`);
         
         // Cancel old schedule
-        console.log('Canceling scheduled playback');
+        logger.info('Canceling scheduled playback');
         if (timeoutid) clearTimeout(timeoutid);
 
         // Get new playlist
@@ -133,15 +133,15 @@ function updatePlaylist(event, filename)
         if (playlist.length > 0) {
             queueSong(playlist[0]);
         } else {
-            console.log("No songs to play in new playlist");
+            logger.info("No songs to play in new playlist");
         }
     }
     else if (event == 'rename') {
-        console.log(`"${filename}" was renamed`);
+        logger.debug(`"${filename}" was renamed`);
         // TODO: Handle this if desired
     }
     else {
-        console.log(`Unexpected FSWatcher event: ${event}`);
+        logger.debug(`Unexpected FSWatcher event: ${event}`);
     }
 }
 
