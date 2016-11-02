@@ -1,6 +1,7 @@
 var fs = require('fs');
 var lame = require('lame');
 var Speaker = require('speaker');
+var logger = require('./lib/log4js');
 
 module.exports = function(io) {
     io.on('connection', function(socket) {
@@ -42,7 +43,7 @@ var io = null;
 fs.watch('arminius.txt', {persistent: true}, updatePlaylist);
 
 
-console.log(new Date(Date.now()).toString());
+logger.info(`Starting up at ${new Date(Date.now()).toString()}...`);
 
 if (playlist.length > 0) {
     queueSong(playlist[0]);

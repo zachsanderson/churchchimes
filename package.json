@@ -11,7 +11,9 @@
   "dependencies": {
     "ejs": "^2.5.2",
     "express": "^4.14.0",
+    "fs-extra": "^1.0.0",
     "lame": "^1.2.3",
+    "log4js": "^0.6.38",
     "prompt": "^1.0.0",
     "socket.io": "^1.5.1",
     "speaker": "^0.3.0"
