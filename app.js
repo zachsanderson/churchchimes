@@ -26,6 +26,18 @@ function processShutdown()
         logger.debug('Successfully started shutdown procedure!');
     });
 }
+/**
+ * Handler for the "restart" button press (sent via websocket command).
+ * See notes for #processShutdown();
+ */
+function processRestart()
+{
+    logger.info('Software restart initiated...');
+    child_process.exec('sudo /sbin/shutdown -r now', function(err, stderr, stdout){
+        if (err) logger.error('Couldn\'t perform software reset: ', err);
+        logger.debug('Successfully started reset procedure!');
+    });
+}
 
 /** Configure Express: **/
 app.use(express.static("public"));
@@ -46,6 +58,9 @@ io.on('connection', function(socket){
     socket.on('shutdown', function(data) {
         processShutdown();
         // NOTE: could respond to client-side on success if we wanted...
+    });
+    socket.on('restart', function(data) {
+        processRestart();
     });
 });
 // Associate socketio with chimeplayer
