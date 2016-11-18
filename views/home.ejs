@@ -3,6 +3,7 @@
     <head>
         <title>Reedsville Chimes</title>
         <link rel="stylesheet" href="app.css">
+        <link rel="stylesheet" href="lato.css">
     </head>
     <body>
         <div id="nowplaying">
@@ -15,9 +16,13 @@
             <div id="nowplayingsong"></div>
         </div>
 
-        <button id="shutdown-btn">
-            Shutdown
-        </button>
+        <div id="action-btns">
+            <div class="col">
+                <button id="restart-btn">Restart</button>
+            </div><div class="col">
+                <button id="shutdown-btn">Shutdown</button>
+            </div>
+        </div>
 
         <!-- <h2>Playing Next</h2>
         <div class="songinfo"><span class="songtitle">Little Brown Church in the Wildwood</span><span class="playtime">Sunday, October 16 8:20am</span></div>
