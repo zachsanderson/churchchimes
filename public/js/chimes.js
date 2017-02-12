@@ -14,6 +14,7 @@ $(function() {
   if (console) console.log('Starting up client side websocket');
   socket.on('play', function(data) {
       $('#nowplayingsong').text(data.song);
+      $('#nowplayingtime').text(data.timetoplay);
       $('#nowplaying').show();
       if (console) console.log('The server indicated "' + data.song + '" is now playing');
   });

@@ -3,14 +3,13 @@ var lame = require('lame');
 var Speaker = require('speaker');
 var logger = require('./lib/log4js');
 
-module.exports = function(io) {
-    io.on('connection', function(socket) {
-        logger.debug("This shit connected here");
-        socket.on('message', function(message) {
-            logger.info("Connection on socket.io on socket", message.value);    
-        });    
-    });
-};
+// module.exports = function(io) {
+//     io.on('connection', function(socket) {
+//         socket.on('message', function(message) {
+//             logger.info("Connection on socket.io on socket", message.value);    
+//         });    
+//     });
+// };
 
 
 
@@ -65,7 +64,7 @@ function queueSong(song) {
           .pipe(new lame.Decoder())
           .on("format", function (format) {
             this.pipe(new Speaker(format));
-            if (io) io.emit('play', {song: playlist[0].songtitle});
+            if (io) io.emit('play', {song: playlist[0].songtitle, timetoplay: playlist[0].timetoplay});
           })
           .on("end", function() {
             logger.info(`${song.filename} finished playing`);
