@@ -64,7 +64,8 @@ function queueSong(song) {
           .pipe(new lame.Decoder())
           .on("format", function (format) {
             this.pipe(new Speaker(format));
-            if (io) io.emit('play', {song: playlist[0].songtitle, timetoplay: playlist[0].timetoplay});
+            if (io) io.emit('play', {song: [playlist[0].songtitle, playlist[1].songtitle, playlist[2].songtitle, playlist[3].songtitle, playlist[4].songtitle, playlist[5].songtitle], 
+                timetoplay: [playlist[0].timetoplay, playlist[1].timetoplay, playlist[2].timetoplay, playlist[3].timetoplay, playlist[4].timetoplay, playlist[5].timetoplay]});
           })
           .on("end", function() {
             logger.info(`${song.filename} finished playing`);
