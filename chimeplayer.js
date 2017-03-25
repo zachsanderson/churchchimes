@@ -2,6 +2,7 @@ var fs = require('fs');
 var lame = require('lame');
 var Speaker = require('speaker');
 var logger = require('./lib/log4js');
+var moment = require('moment');
 
 // module.exports = function(io) {
 //     io.on('connection', function(socket) {
@@ -65,7 +66,7 @@ function queueSong(song) {
           .on("format", function (format) {
             this.pipe(new Speaker(format));
             if (io) io.emit('play', {song: [playlist[0].songtitle, playlist[1].songtitle, playlist[2].songtitle, playlist[3].songtitle, playlist[4].songtitle, playlist[5].songtitle], 
-                timetoplay: [playlist[0].timetoplay, playlist[1].timetoplay, playlist[2].timetoplay, playlist[3].timetoplay, playlist[4].timetoplay, playlist[5].timetoplay]});
+                timetoplay: [moment(playlist[0].timetoplay).format('dddd, MMMM D hh:mm a'), moment(playlist[1].timetoplay).format('dddd, MMMM D hh:mm a'), moment(playlist[2].timetoplay).format('dddd, MMMM D hh:mm a'), moment(playlist[3].timetoplay).format('dddd, MMMM D hh:mm a'), moment(playlist[4].timetoplay).format('dddd, MMMM D hh:mm a'), moment(playlist[5].timetoplay).format('dddd, MMMM D hh:mm a')]});
           })
           .on("end", function() {
             logger.info(`${song.filename} finished playing`);

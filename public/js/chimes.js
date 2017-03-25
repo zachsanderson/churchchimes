@@ -1,6 +1,7 @@
 /** 
  * Client side JS for ChimePlayer project
  */
+
 // Action button hide delay in ms
 const HIDE_DELAY = 5000;
 
